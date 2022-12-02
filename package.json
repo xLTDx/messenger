@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"cd server && npm run start\" \"cd client && npm run start\""
   },
   "author": "Orlov Iliya",
   "license": "ISC",
