@@ -1,15 +1,44 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { dialogs, users } from '../DB'
+import { setDialog } from '../redux/dialogSlice'
 
 const Dialogs = () => {
-  return (
-    <div className='dialogs item'>
-        
-        {
-            
-        }
 
-    </div>
-  )
+    const dispatch = useDispatch()
+
+    const user = useSelector((state) => state.user)
+
+    const userList = users.filter(obj => obj.id != user.id)
+
+    const findDialog = (recipient) => {
+        const arr = [user.id, recipient]
+        const match = dialogs.find(obj => JSON.stringify(obj.users.sort()) == JSON.stringify(arr.sort()))
+        
+        return match.dialogId
+    }
+
+    const changeDialog = (userId, dialogId) => {
+        dispatch(setDialog({userId, dialogId}))
+    }
+    
+    
+
+    return (
+        <div className='dialogs item'>
+
+            {
+                userList?.map(user => (
+                    <div onClick={() => { changeDialog(user.id, findDialog(user.id)) }} className="dialog_item">
+                        {
+                            user.name
+                        }
+                    </div>
+                ))
+            }
+
+        </div>
+    )
 }
 
 export default Dialogs

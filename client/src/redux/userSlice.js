@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { users } from "../DB";
 
 const initialState = {
-    id: -1,
+    id: 0,
     name: ""
 }
 
@@ -18,10 +18,9 @@ export const userSlice = createSlice({
         setUser: (state, action) => {
             
             const user = findUser(action.payload)
-            state = {...user}
-            // state.id = user.id
-            // state.name = user.name
-            console.log(state)
+            state.id = user.id
+            state.name = user.name
+            
         }
     }
 })

@@ -4,16 +4,78 @@
     box-sizing: border-box;
 }
 
-
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 .wrap {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     height: 100vh;
-    
+
     .item {
         border: 1px solid red;
-        
     }
 
+    .dialogs {
+        .dialog_item {
+            border: 1px solid rgb(3, 183, 255);
+            padding: 10px;
+        }
+    }
+
+    .message_wrap {
+
+        display: grid;
+        grid-template-rows: 1fr;
+
+        .message_input {
+            align-self: flex-end;
+            display: flex;
+
+            .message_textarea {
+                width: 100%;
+                height: 50px;
+                padding: 5px;
+                border: 1px solid rgb(3, 183, 255);
+                
+            }
+
+            .message_textarea:focus {
+                border: 1px solid rgb(3, 183, 255);
+                outline: none;
+                box-shadow: 0 0 10px #719ECE;
+
+            }
+
+            .send_button {
+                background: rgb(3, 183, 255);
+                border: 0;
+                padding: 10px;
+                color: white;
+            }
+        }
+
+        .message {
+            
+            .message_item {
+                padding: 10px;
+
+                .name {
+                    color: blue;
+                    font-size: 12px;
+                }
+
+                .text {
+                    width: 70%;
+                }
+            }
+
+            .sender_message {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+            }
+        }
+    }
 }

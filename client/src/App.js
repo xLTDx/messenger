@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.scss';
 import Dialogs from './components/Dialogs';
 import Info from './components/Info';
@@ -10,27 +10,24 @@ function App() {
 
     const dispatch = useDispatch()
 
-    const [userId, setUserId] = useState(0)
-    const [log, setLog] = useState(false)
-
     const isMount = useRef(false)
     useEffect(() => {
         if (isMount.current) {
             let id = prompt("Введите ID:")
             id = Number(id)
-            setUserId(id)
-            setLog(true)
             dispatch(setUser(id))
         }
         isMount.current = true
     }, [])
+
+    const user = useSelector((state) => state.user)
 
     return (
 
         <div className="wrap">
             {
 
-                log && (
+                user.id != 0 && (
                     <Fragment>
                         <Dialogs />
                         <Message />
