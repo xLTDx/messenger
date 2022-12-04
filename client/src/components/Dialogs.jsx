@@ -8,6 +8,7 @@ const Dialogs = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => state.user)
+    const dialog = useSelector((state) => state.dialog)
 
     const userList = users.filter(obj => obj.id != user.id)
 
@@ -29,7 +30,7 @@ const Dialogs = () => {
 
             {
                 userList?.map(user => (
-                    <div onClick={() => { changeDialog(user.id, findDialog(user.id)) }} className="dialog_item">
+                    <div key={user.id} onClick={() => { changeDialog(user.id, findDialog(user.id)) }} className={user.id == dialog.recepient ? "choosen dialog_item": "dialog_item"}>
                         {
                             user.name
                         }
