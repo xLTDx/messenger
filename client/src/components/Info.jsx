@@ -7,7 +7,6 @@ const Info = () => {
     const user = useSelector((state) => state.user)
     const dialog = useSelector((state) => state.dialog)
 
-    console.log(dialog)
     return (
         <div className='info item'>
 

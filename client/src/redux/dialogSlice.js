@@ -16,9 +16,12 @@ export const dialogSlice = createSlice({
             state.selectedDialog = action.payload.dialogId
             state.messages = dialogs.find(obj => obj.dialogId === action.payload.dialogId).messages
             state.recepient = action.payload.userId
+        },
+        addMessage: (state, action) => {
+            state.messages.push(action.payload)
         }
     }
 })
 
-export const {setDialog} = dialogSlice.actions
+export const {setDialog, addMessage} = dialogSlice.actions
 export default dialogSlice.reducer
