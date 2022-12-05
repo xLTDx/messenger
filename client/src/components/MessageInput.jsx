@@ -11,30 +11,47 @@ const MessageInput = ({ socket }) => {
     const [textValue, setTextValue] = useState("")
     const dialog = useSelector((state) => state.dialog)
     const user = useSelector((state) => state.user)
-    
+
     const isMount = useRef(false)
     useEffect(() => {
-        if(isMount.current == true){
-            socket.on('chat message', function(data) {
-                
+    
+        if (isMount.current == true) {
+            socket.on('chat', function (data) {
+
                 dispatch(addMessage(data))
-        
-              });
+
+            });
+
         }
+
         isMount.current = true
+    
     }, [])
 
+    useEffect(() => {
+        socket.emit("room", dialog.selectedDialog)
+    }, [dialog.selectedDialog])
+
     const submitHandler = () => {
-        
-        const data = {
+
+        const messageData = {
             sender: user.id,
             text: textValue
         }
 
-        socket.emit('chat message', data);
+        const data = {
+            message: messageData,
+            room: dialog.selectedDialog
+        }
+
+
+
+        socket.emit("chat", data)
+
+        //socket.emit('chat message', data);
 
         setTextValue("")
-    
+
     }
 
     return (
@@ -42,7 +59,7 @@ const MessageInput = ({ socket }) => {
         <div className="message_input">
 
             <textarea value={textValue} onChange={(e) => setTextValue(e.target.value)} className='message_textarea'>
-                
+
             </textarea>
 
             <button onClick={() => submitHandler()} className='send_button'>

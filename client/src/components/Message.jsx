@@ -7,9 +7,6 @@ import MessageInput from './MessageInput'
 
 const socket = io();
 
-// socket.emit("room", "room1")
-
-
 
 const Message = () => {
 
