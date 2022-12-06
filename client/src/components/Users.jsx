@@ -1,21 +1,35 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { dialogs, users } from '../DB'
 import { setDialog } from '../redux/dialogSlice'
 import axios from 'axios'
 
-const Users = async () => {
+const Users = () => {
+
+
 
     const dispatch = useDispatch()
 
     const user = useSelector((state) => state.user)
     const dialog = useSelector((state) => state.dialog)
 
-    // const userList = await (await axios.get("http://localhost:7153/getUsers")).data.result
+    const [userList, setUserList] = useState([])
 
-    // console.log(userList)
+    const isMounted = useRef(false)
+    useEffect(() => {
+        if (isMounted.current == true) {
+            getUsers()
+            console.log(userList)
+        }
+        isMounted.current = true
 
-    const userList = users.filter(obj => obj.id != user.id)
+
+    }, [])
+
+    const getUsers = async () => {
+        await axios.get("http://localhost:7153/getUsers").then(resp => setUserList(resp.data.result))
+    }
+
 
     const findDialog = (recipient) => {
         const arr = [user.id, recipient]
@@ -32,7 +46,7 @@ const Users = async () => {
         <Fragment>
             {
                 userList?.map(user => (
-                    <div key={user.id} onClick={() => { changeDialog(user.id, findDialog(user.id)) }} className={user.id == dialog.recepient ? "choosen dialog_item" : "dialog_item"}>
+                    <div key={user._id} onClick={() => { changeDialog(user.id, findDialog(user.id)) }} className={user.id == dialog.recepient ? "choosen dialog_item" : "dialog_item"}>
                         {
                             user.name
                         }

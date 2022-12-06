@@ -41,8 +41,8 @@ const App = () =>  {
 
                 user.id != 0 && (
                     <Fragment>
-                        {/* <Dialogs />
-                        <Message /> */}
+                        <Dialogs />
+                        {/* <Message /> */}
                         <Info />
                     </Fragment>
                 )
