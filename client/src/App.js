@@ -5,8 +5,15 @@ import Dialogs from './components/Dialogs';
 import Info from './components/Info';
 import Message from './components/Message';
 import { setUser } from './redux/userSlice';
+import axios from 'axios';
 
-function App() {
+const App = () =>  {
+
+    const getUser = async (id) => {
+        await axios.post("http://localhost:7153/getOneUser", { id })
+        .then(resp => {dispatch(setUser(resp.data.result[0]))})
+        
+    }
 
     const dispatch = useDispatch()
 
@@ -14,8 +21,13 @@ function App() {
     useEffect(() => {
         if (isMount.current) {
             let id = prompt("Введите ID:")
-            id = Number(id)
-            dispatch(setUser(id))
+
+            const res = getUser(id)
+            
+            // console.log(res)
+
+            // id = Number(id)
+            // dispatch(setUser(id))
         }
         isMount.current = true
     }, [])
@@ -29,8 +41,8 @@ function App() {
 
                 user.id != 0 && (
                     <Fragment>
-                        <Dialogs />
-                        <Message />
+                        {/* <Dialogs />
+                        <Message /> */}
                         <Info />
                     </Fragment>
                 )

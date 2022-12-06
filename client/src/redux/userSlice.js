@@ -1,14 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { users } from "../DB";
+import axios from 'axios'
 
 const initialState = {
-    id: 0,
+    id: "",
     name: ""
-}
-
-const findUser = (id) => {
-    const userData = users.find(obj => obj.id === id)
-    return userData
 }
 
 export const userSlice = createSlice({
@@ -16,14 +12,13 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            
-            const user = findUser(action.payload)
-            state.id = user.id
-            state.name = user.name
+
+            state.id = action.payload._id
+            state.name = action.payload.name
             
         }
     }
 })
 
-export const {setUser} = userSlice.actions
+export const { setUser } = userSlice.actions
 export default userSlice.reducer
