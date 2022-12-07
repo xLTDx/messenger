@@ -7,8 +7,8 @@ import { Server } from 'socket.io';
 const io = new Server(server);
 import mongoose from 'mongoose';
 import { v4 } from 'uuid';
-import { addUser } from './post/post.js';
-import { getOneUser, getUsers } from './get/get.js';
+import { addUser, getUsers, createDialog, dialogExists, getDialogId, addMessage, getMessage, getUsersFromDialog } from './post/post.js';
+import { getOneUser } from './get/get.js';
 import cors from 'cors'
 
 mongoose.connect('mongodb+srv://admin:UzjOmWIJ4N8Zj4VH@cluster0.p1dfo9b.mongodb.net/messenger?retryWrites=true&w=majority')
@@ -22,8 +22,14 @@ app.use(cors())
 
 app.post("/addUser", addUser)
 app.post("/getOneUser", getOneUser)
+app.post("/createDialog", createDialog)
+app.post("/dialogExists", dialogExists)
+app.post("/getUsers", getUsers)
+app.post("/getDialogId", getDialogId)
+app.post("/addMessage", addMessage)
+app.post("/getMessage", getMessage)
+app.post("/getUsersFromDialog", getUsersFromDialog)
 
-app.get("/getUsers", getUsers)
 
 // Sockets
 

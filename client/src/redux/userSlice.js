@@ -4,7 +4,8 @@ import axios from 'axios'
 
 const initialState = {
     id: "",
-    name: ""
+    name: "",
+    recepientId: ""
 }
 
 export const userSlice = createSlice({
@@ -16,9 +17,12 @@ export const userSlice = createSlice({
             state.id = action.payload._id
             state.name = action.payload.name
             
+        },
+        setRecepient: (state, action) => {
+            state.recepientId = action.payload.id
         }
     }
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, setRecepient } = userSlice.actions
 export default userSlice.reducer

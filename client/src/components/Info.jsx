@@ -30,7 +30,7 @@ const Info = () => {
             </p>
             <p>
                 {
-                    "recepient id:" + dialog.recepient
+                    "recepient id:" + user.recepientId
                 }
             </p>
             <p>

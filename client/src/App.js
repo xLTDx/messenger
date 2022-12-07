@@ -6,6 +6,7 @@ import Info from './components/Info';
 import Message from './components/Message';
 import { setUser } from './redux/userSlice';
 import axios from 'axios';
+import { Route, Routes } from 'react-router-dom';
 
 const App = () =>  {
 
@@ -24,10 +25,6 @@ const App = () =>  {
 
             const res = getUser(id)
             
-            // console.log(res)
-
-            // id = Number(id)
-            // dispatch(setUser(id))
         }
         isMount.current = true
     }, [])
@@ -42,7 +39,10 @@ const App = () =>  {
                 user.id != 0 && (
                     <Fragment>
                         <Dialogs />
-                        {/* <Message /> */}
+                        <Routes>
+                            <Route path="/dialog/:dialogId" element={<Message />} />
+                        </Routes>
+                        
                         <Info />
                     </Fragment>
                 )
