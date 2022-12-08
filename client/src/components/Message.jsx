@@ -11,69 +11,61 @@ const socket = io();
 
 const Message = () => {
 
+    const bottom = useRef()
+
     const dialogData = useSelector((state) => state.dialog)
     const userData = useSelector((state) => state.user)
 
     const { dialogId } = useParams()
 
-    const [messagesList, setMessagesList] = useState()
+    const [messagesList, setMessagesList] = useState([])
 
-    const [usersList, setUsersList] = useState()
-    
-    // let usersList = []
-    // let recepientId = ""
-
-    const [recepientId, setRecepientId] = useState("")
-    const [recepientName, setRecepientName] = useState("")
+    const [recepientData, setRecepientData] = useState()
 
     const getMessage = async () => {
-        await axios.post("http://localhost:7153/getMessage", { dialogId, userId: userData.id })
-            .then(resp => setMessagesList(resp.data.messages))
+        console.log("start getting")
+        await axios.post("http://localhost:7153/getMessage", { dialogId })
+            .then(resp => {setMessagesList(resp.data.messages); console.log("get")})
+        console.log("geted")
     }
 
-    // const getUsers = async () => {
-    //     await axios.post("http://localhost:7153/getUsersFromDialog", { dialogId })
-    //         .then(resp => setUsersList(resp.data.users))
+    const getLastMessage = async () => {
+        await axios.post("http://localhost:7153/getLastMessage", { dialogId })
+            .then(resp => {
+                const arr = [...messagesList]
+                console.log(arr)
+                console.log("asdasdasd")
+                //setMessagesList(messagesList.push(resp.data.message)) 
 
-    // }
+            })
+    }
 
-    // const getRecepientId = () => {
-
-    //     setRecepientId(usersList)
-
-    // }
-
-    // const getRecepientName = async () => {
-
-    //     await axios.post("http://localhost:7153/getOneUser", { id: recepientId })
-    //         .then(resp => console.log(resp.data))
-
-    // }
+    const getRecepient = async () => {
+        await axios.post("http://localhost:7153/getRecepient", { dialogId, userId: userData.id })
+            .then(resp => setRecepientData(resp.data))
+    }
 
     const isMounted = useRef(false)
     useEffect(() => {
         if (isMounted.current == true) {
+
             getMessage()
+            getRecepient()
 
-            // getUsers()
+            socket.emit("dialogId", dialogId)
+
             
-            // getRecepientId()
 
-            // console.log(ri)
-            // getRecepientName()
         }
         isMounted.current = true
-        
+
 
     }, [])
 
+
     useEffect(() => {
-        console.log(recepientId)
-        
-    }, [usersList, recepientId])
-
-
-
+        bottom.current.scrollIntoView({behavior: 'smooth'});
+    }, [messagesList])
 
     return (
 
@@ -106,7 +98,7 @@ const Message = () => {
                                 <div className="message_item recepient_message">
                                     <p className='name'>
                                         {
-                                            recepientName
+                                            recepientData?.user[0].name
                                         }
                                     </p>
                                     <p className='text_message'>
@@ -119,9 +111,10 @@ const Message = () => {
 
                     ))
                 }
+                <div ref={bottom} ></div>
             </div>
 
-            <MessageInput socket={socket} />
+            <MessageInput getMessage={getMessage} socket={socket} />
 
         </div>
     )

@@ -7,7 +7,7 @@ import { Server } from 'socket.io';
 const io = new Server(server);
 import mongoose from 'mongoose';
 import { v4 } from 'uuid';
-import { addUser, getUsers, createDialog, dialogExists, getDialogId, addMessage, getMessage, getUsersFromDialog } from './post/post.js';
+import { addUser, getUsers, createDialog, dialogExists, getDialogId, addMessage, getMessage, getUsersFromDialog, getRecepient, getLastMessage } from './post/post.js';
 import { getOneUser } from './get/get.js';
 import cors from 'cors'
 
@@ -29,6 +29,8 @@ app.post("/getDialogId", getDialogId)
 app.post("/addMessage", addMessage)
 app.post("/getMessage", getMessage)
 app.post("/getUsersFromDialog", getUsersFromDialog)
+app.post("/getRecepient", getRecepient)
+app.post("/getLastMessage", getLastMessage)
 
 
 // Sockets
@@ -42,21 +44,21 @@ io.sockets.on("connection", socket => {
     // });
 
 
-    socket.on("room", (room) => {
-        socket.join(room);
-        console.log("joined in " + room)
+    socket.on("dialogId", (dialogId) => {
+        socket.join(dialogId);
+        console.log("joined in " + dialogId)
 
     })
 
     socket.on('chat', (data) => {
         
-        console.log(data)
 
-        const { message, room } = data;
-        console.log(`msg: ${message.text}, room: ${room}`);
-        io.to(room).emit('chat', message);
+        const { text, sender, dialogId } = data;
+        console.log(`msg: ${text} ${sender}, room: ${dialogId}`);
+        io.to(dialogId).emit('chat', data);
 
     })
+
 
 });
 

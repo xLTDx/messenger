@@ -1,50 +1,69 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addMessage } from '../redux/dialogSlice';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+const MessageInput = (props) => {
+
+    const { socket, getMessage } = props
 
 
-
-const MessageInput = ({ socket }) => {
-
-    const dispatch = useDispatch()
+    const { dialogId } = useParams()
 
     const [textValue, setTextValue] = useState("")
-    const dialog = useSelector((state) => state.dialog)
+
     const user = useSelector((state) => state.user)
+
+    const sendMessage = async (data) => {
+        const { dialogId, sender, text } = data
+        console.log("send")
+        await axios.post("http://localhost:7153/addMessage", { dialogId, sender, text }).then(resp => console.log("sending"))
+        console.log("sended")
+        
+    }
 
     const isMount = useRef(false)
     useEffect(() => {
-    
-        if (isMount.current == true) {
-            socket.on('chat', function (data) {
+        
 
-                dispatch(addMessage(data))
+            if (isMount.current == true) {
+                socket.on('chat', function (data) {
 
-            });
+                    getMessage()
 
+                    // console.log("chat inp")
+
+                    // let promise = new Promise(function (resolve, reject) {
+                    //     resolve(sendMessage(data))
+                    // });
+
+                    // promise.then(function (result) {
+                    //     getMessage()
+                    // });
+
+
+                });
+
+            
         }
 
+
         isMount.current = true
-    
+
     }, [])
 
-    useEffect(() => {
-        socket.emit("room", dialog.selectedDialog)
-    }, [dialog.selectedDialog])
+
 
     const submitHandler = () => {
 
-        const messageData = {
-            sender: user.id,
-            text: textValue
-        }
-
         const data = {
-            message: messageData,
-            room: dialog.selectedDialog
+            text: textValue,
+            dialogId,
+            sender: user.id
         }
 
-
+        sendMessage(data)
 
         socket.emit("chat", data)
 

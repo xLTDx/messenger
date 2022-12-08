@@ -62,7 +62,9 @@ body {
         }
 
         .message {
-            
+            overflow-y: scroll;
+            height: calc(100vh - 50px);
+
             .message_item {
                 padding: 10px;
 

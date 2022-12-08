@@ -127,22 +127,25 @@ export const getDialogId = async (req, res) => {
 export const addMessage = async (req, res) => {
 
     try {
-        
+
+
         await dialogModel.findOneAndUpdate(
-            { _id: req.body.id }, 
-            {$push: 
+            { _id: req.body.dialogId },
+            {
+                $push:
                 {
                     messages: {
                         sender: req.body.sender,
                         text: req.body.text
                     }
                 }
-            }  
+            }
         )
 
         res.json({
             status: 1
         })
+
 
 
     } catch (err) {
@@ -157,19 +160,13 @@ export const getMessage = async (req, res) => {
 
     try {
 
-        const data = await dialogModel.find({_id: req.body.dialogId})
-
-        if(data[0].users.includes(req.body.userId)){
-            return res.json({
-                messages: data[0].messages
-            })
-        }
+        const data = await dialogModel.find({ _id: req.body.dialogId })
 
         return res.json({
-            data: 0
+            messages: data[0].messages
         })
 
-        
+
 
 
     } catch (err) {
@@ -184,11 +181,71 @@ export const getUsersFromDialog = async (req, res) => {
 
     try {
 
-        const data = await dialogModel.find({_id: req.body.dialogId})
+        const data = await dialogModel.find({ _id: req.body.dialogId })
 
-            return res.json({
-                users: data[0].users
-            })
+        return res.json({
+            users: data[0].users
+        })
+
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Ошибка поиска сообщений",
+            error: err
+        })
+    }
+}
+
+export const getRecepient = async (req, res) => {
+
+    try {
+
+        const data = await dialogModel.find({ _id: req.body.dialogId, userId: req.body.userId })
+
+        const users = data[0].users
+
+
+
+
+        let recepient
+
+        users.forEach(element => {
+
+            if (element != req.body.userId) {
+
+                recepient = element
+            }
+        });
+
+        const userData = await userModel.find({ "_id": recepient })
+
+        return res.json({
+            user: userData
+        })
+
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Ошибка поиска получателя сообщений",
+            error: err
+        })
+    }
+}
+
+export const getLastMessage = async (req, res) => {
+
+    try {
+
+        const data = await dialogModel.find({ _id: req.body.dialogId })
+
+        let lenght = data[0].messages.length
+
+
+        return res.json({
+            message: data[0].messages[lenght - 1]
+        })
+
+
 
 
     } catch (err) {
