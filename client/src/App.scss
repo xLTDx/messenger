@@ -6,6 +6,50 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+    background-color: #c2dfff;
+    
+}
+
+.enter {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    
+
+    form {
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        padding: 10px;
+        border-radius: 10px;
+        color: rgb(46, 46, 46);
+        width: 300px;
+        text-align: center;
+
+        h3 {
+            margin-bottom: 10px;
+        }
+
+        .error {
+            color: rgb(253, 105, 130);
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 0;
+            background: #c2dfff;
+            
+        }
+
+        input:focus {
+            border: 1px solid #719ECE;
+            outline: none;
+        }
+    }
 }
 
 .wrap {

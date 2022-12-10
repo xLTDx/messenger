@@ -1,5 +1,8 @@
 import dialogModel from "../models/dialogModel.js"
 import userModel from "../models/userModel.js"
+import bcrypt from 'bcrypt'
+import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 
 export const addUser = async (req, res) => {
 
@@ -103,7 +106,6 @@ export const dialogExists = async (req, res) => {
         })
     }
 }
-
 
 export const getDialogId = async (req, res) => {
 
@@ -255,3 +257,106 @@ export const getLastMessage = async (req, res) => {
         })
     }
 }
+
+export const registration = async (req, res) => {
+
+    try {
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json(errors.array());
+        }
+
+        const candidate = await userModel.findOne({ login: req.body.login })
+
+
+        if (candidate) {
+
+            return res.json({
+                status: 0,
+                message: "Пользователь уже существует"
+            })
+        }
+
+
+        const salt = bcrypt.genSaltSync(7);
+
+        const password = bcrypt.hashSync(req.body.password, salt);
+
+        const newUser = new userModel({
+            login: req.body.login,
+            password,
+            name: req.body.name,
+
+        })
+
+        newUser.save()
+
+        return res.json({
+            status: 1,
+            message: "Пользователь добавлен"
+        })
+
+
+    } catch (err) {
+        res.status(500).json({
+            status: -1,
+            message: "Ошибка добавления пользователя",
+            error: err
+        })
+    }
+}
+
+export const login = async (req, res) => {
+
+    try {
+
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.status(400).json(errors.array());
+        }
+
+        const user = await userModel.findOne({ login: req.body.login })
+
+        if (!user) {
+            return res.json({
+                message: "Пользователь не найден"
+            })
+        }
+
+        const auth = bcrypt.compareSync(req.body.password, user.password)
+
+        if (auth) {
+            
+            const dataToken = {
+                id: user._id,
+                login: user.login
+            }
+
+            const token = jwt.sign(dataToken, "secret_word", { expiresIn: "30d" })
+            
+            return res.json({
+                id: user._id,
+                login: user.login,
+                token
+            })
+        }
+        else {
+            return res.json({
+                message: "Не верный пароль"
+            })
+        }
+
+
+
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Ошибка входа",
+            error: err
+        })
+    }
+}
+

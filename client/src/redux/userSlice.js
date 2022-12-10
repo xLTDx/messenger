@@ -5,6 +5,8 @@ import axios from 'axios'
 const initialState = {
     id: "",
     name: "",
+    login: "",
+    token: "",
     recepientId: ""
 }
 
@@ -15,7 +17,10 @@ export const userSlice = createSlice({
         setUser: (state, action) => {
 
             state.id = action.payload._id
+            state.login = action.payload.login
             state.name = action.payload.name
+            state.token = action.payload.token
+            
             
         },
         setRecepient: (state, action) => {

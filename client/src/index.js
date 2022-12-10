@@ -5,13 +5,17 @@ import App from './App';
 import { store } from './redux/store';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
+import Enter from './components/Enter';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <BrowserRouter>
             <Provider store={store}>
-                <App />
+
+                <Enter />
+{/* 
+                <App /> */}
             </Provider>
         </BrowserRouter>
     </React.StrictMode>
