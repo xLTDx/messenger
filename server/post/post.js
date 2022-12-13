@@ -340,11 +340,12 @@ export const login = async (req, res) => {
             return res.json({
                 id: user._id,
                 login: user.login,
+                name: user.name,
                 token
             })
         }
         else {
-            return res.json({
+            return res.status(401).json({
                 message: "Не верный пароль"
             })
         }

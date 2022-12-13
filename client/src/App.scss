@@ -36,6 +36,11 @@ body {
             color: rgb(253, 105, 130);
         }
 
+        a {
+            text-decoration: none;
+            color: #719ECE;
+        }
+
         input {
             margin-bottom: 10px;
             padding: 10px;
@@ -54,14 +59,31 @@ body {
 
 .wrap {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    height: 100vh;
+    grid-template-columns: 1fr 2fr;
+    max-height: 100%;
+    padding-right: 10px;
 
     .item {
-        border: 1px solid red;
+        background: white;
+        border-radius: 10px;
+        margin: 10px 0 10px 10px;
+        height: calc(100vh - 20px);
+        opacity: 0.9;
+        
     }
 
     .dialogs {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+
+        .user_item {
+            border-bottom: 1px solid rgb(3, 183, 255); 
+            padding: 10px;  
+            text-decoration: none; 
+            color:rgb(3, 183, 255);
+        }
+
         .dialog_item {
             border: 1px solid rgb(3, 183, 255);
             padding: 10px;
@@ -77,12 +99,15 @@ body {
 
         display: grid;
         grid-template-rows: 1fr;
+        padding: 10px;
 
         .message_input {
-            align-self: flex-end;
+            margin-top: 10px;
+            align-self:flex-start;
             display: flex;
 
             .message_textarea {
+                border-radius: 10px 0 0 10px;
                 width: 100%;
                 height: 50px;
                 padding: 5px;
@@ -102,23 +127,26 @@ body {
                 border: 0;
                 padding: 10px;
                 color: white;
+                border-radius: 0 10px 10px 0;
             }
         }
 
         .message {
             overflow-y: scroll;
-            height: calc(100vh - 50px);
+            height: 100%;
 
             .message_item {
                 padding: 10px;
 
                 .name {
-                    color: blue;
+                    color: rgb(3, 183, 255);
                     font-size: 12px;
+                    margin-bottom: 5px;
                 }
 
                 .text {
                     width: 70%;
+                    color: #2c2c2c;
                 }
             }
 

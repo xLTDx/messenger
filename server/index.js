@@ -38,6 +38,7 @@ app.post("/login", loginValidation, login)
 
 // Sockets
 
+
 io.sockets.on("connection", socket => {
 
     console.log("user", socket.id)
@@ -46,11 +47,21 @@ io.sockets.on("connection", socket => {
         
         socket.join(dialogId);
 
+        console.log("room: " + dialogId)
+
+        console.log( socket.rooms)
+
+
     })
+
 
     socket.on('chat', (data) => {
         
-        io.to(dialogId).emit('chat', data);
+        console.log(data)
+        console.log("to " + data.dialogId)
+        io.to(data.dialogId).emit('chat', data);
+
+        // io.emit('chat', data);
 
     })
 

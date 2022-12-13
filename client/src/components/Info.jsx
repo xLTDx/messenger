@@ -25,7 +25,7 @@ const Info = () => {
             </p>
             <p>
                 {
-                    "selected dialog:" + dialog.selectedDialog
+                    "selected dialog:" + user.selectedDialog
                 }
             </p>
             <p>

@@ -7,7 +7,9 @@ const initialState = {
     name: "",
     login: "",
     token: "",
-    recepientId: ""
+    recepientId: "",
+    selectedDialog: "",
+    socket: {}
 }
 
 export const userSlice = createSlice({
@@ -16,7 +18,7 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
 
-            state.id = action.payload._id
+            state.id = action.payload.id
             state.login = action.payload.login
             state.name = action.payload.name
             state.token = action.payload.token
@@ -25,9 +27,16 @@ export const userSlice = createSlice({
         },
         setRecepient: (state, action) => {
             state.recepientId = action.payload.id
+        },
+        setSelectedDialog: (state, action) => {
+            state.selectedDialog = action.payload
+        },
+        setSocket: (state, action) => {
+            state.socket = action.payload
         }
+        
     }
 })
 
-export const { setUser, setRecepient } = userSlice.actions
+export const { setUser, setRecepient, setSelectedDialog, setSocket } = userSlice.actions
 export default userSlice.reducer

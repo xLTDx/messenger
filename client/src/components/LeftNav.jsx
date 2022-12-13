@@ -7,7 +7,7 @@ const LeftNav = () => {
             <Link to={"dialogs"}>
                 Диалоги
             </Link>
-            <Link to={"users"}>
+            <Link to={"/users"}>
                 Пользователи
             </Link>
         </Fragment>

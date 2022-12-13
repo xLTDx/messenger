@@ -13,9 +13,8 @@ root.render(
         <BrowserRouter>
             <Provider store={store}>
 
-                <Enter />
-{/* 
-                <App /> */}
+                <App />
+
             </Provider>
         </BrowserRouter>
     </React.StrictMode>

@@ -1,64 +1,25 @@
 import axios from 'axios'
-import React, { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { Fragment, useRef, useState } from 'react'
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
 
 
 
 
 const Enter = () => {
 
-    const navigate = useNavigate()
-
-    const regHandler = async (e) => {
-        e.preventDefault()
-
-        setExist("")
-
-        const data = {
-            login,
-            password,
-            name: userName
-        }
-
-        console.log(data)
-
-        await axios.post("http://localhost:7153/registration", data)
-            .then(resp => {
-                console.log(resp.data)
-                if (resp.data.status == 1) {
-                    navigate("/login")
-                }
-                if (resp.data.status == 0) {
-                    setExist("Пользователь уже существует")
-                }
-                if (resp.data.status == -1) {
-                    setExist("Произошла ошибка")
-                }
-
-            })
-
-    }
-
-    const [login, setLogin] = useState()
-    const [password, setPass] = useState()
-    const [userName, setUserName] = useState()
-    const [exist, setExist] = useState()
-
     return (
-        <div className='enter'>
+        <Fragment>
+            asdasdas
+            <Routes>
 
-            <form onSubmit={(e) => regHandler(e)}>
+                <Route path="registration*" element={<Register />} />
+                <Route path="login" element={<Login />} />
 
-                <h3>Регистрация</h3>
-                <input type="text" autoFocus required minLength="3" placeholder='Логин' value={login} onChange={(e) => setLogin(e.target.value)} />
-                <input type="password" onInvalid="123123123" required minLength="5" placeholder='Пароль' value={password} onChange={(e) => setPass(e.target.value)} />
-                <input type="text" required minLength="2" placeholder='Имя' value={userName} onChange={(e) => setUserName(e.target.value)} />
-                <input type="submit" value="Зарегестрироваться" />
-                <div className="error">{exist}</div>
+            </Routes>
+        </Fragment>
 
-            </form>
-
-        </div>
     )
 }
 
