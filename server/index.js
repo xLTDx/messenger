@@ -7,7 +7,7 @@ import { Server } from 'socket.io';
 const io = new Server(server);
 import mongoose from 'mongoose';
 import { v4 } from 'uuid';
-import { addUser, getUsers, createDialog, dialogExists, getDialogId, addMessage, getMessage, getUsersFromDialog, getRecepient, getLastMessage, registration, login } from './post/post.js';
+import { addUser, getUsers, createDialog, dialogExists, getDialogId, addMessage, getMessage, getUsersFromDialog, getRecepient, getLastMessage, registration, login, removeDialog } from './post/post.js';
 import { getOneUser } from './get/get.js';
 import cors from 'cors'
 import { loginValidation, registrationValidation } from './validation.js';
@@ -33,6 +33,7 @@ app.post("/getMessage", getMessage)
 app.post("/getUsersFromDialog", getUsersFromDialog)
 app.post("/getRecepient", getRecepient)
 app.post("/getLastMessage", getLastMessage)
+app.post("/removeDialog", removeDialog)
 app.post("/registration", registrationValidation, registration)
 app.post("/login", loginValidation, login) 
 
@@ -49,17 +50,22 @@ io.sockets.on("connection", socket => {
 
         console.log("room: " + dialogId)
 
-        console.log( socket.rooms)
-
-
     })
 
 
     socket.on('chat', (data) => {
         
-        console.log(data)
-        console.log("to " + data.dialogId)
         io.to(data.dialogId).emit('chat', data);
+
+        // io.emit('chat', data);
+
+    })
+
+    socket.on('removeDialog', (data) => {
+        
+        console.log("delete on server")
+
+        io.to(data).emit('removeDialog', data);
 
         // io.emit('chat', data);
 

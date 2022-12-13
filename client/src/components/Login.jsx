@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../redux/userSlice';
@@ -30,7 +30,11 @@ const Login = () => {
 
                 dispatch(setUser(resp.data))
 
-                navigate("/")
+                console.log(resp.data)
+
+                localStorage.setItem("user", JSON.stringify(resp.data))
+
+                navigate("/main")
                 
 
 
@@ -45,6 +49,18 @@ const Login = () => {
     const [password, setPass] = useState()
     const [userName, setUserName] = useState()
     const [error, setError] = useState()
+
+    const isMount = useRef(false)
+    useEffect(() => {
+        if(isMount.current == true){
+            if(JSON.parse(localStorage.getItem('user')) != null){
+                navigate('/main')
+            }
+        }
+
+        isMount.current = true
+    })
+
 
     return (
         <div className='enter'>

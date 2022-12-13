@@ -361,3 +361,28 @@ export const login = async (req, res) => {
     }
 }
 
+export const removeDialog = async (req, res) => {
+
+    try {
+
+        await dialogModel.findOneAndUpdate(
+            { _id: req.body.dialogId },
+            {
+                messages: []
+            }
+        )
+
+            return res.json({
+                status: 1
+            })
+        
+
+
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Ошибка входа",
+            error: err
+        })
+    }
+}

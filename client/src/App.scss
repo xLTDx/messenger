@@ -59,9 +59,14 @@ body {
 
 .wrap {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 1fr 1fr;
     max-height: 100%;
     padding-right: 10px;
+
+    .recepient_info {
+        display: flex;
+        justify-content: space-between;
+    }
 
     .item {
         background: white;
@@ -76,6 +81,32 @@ body {
         display: flex;
         flex-direction: column;
         padding: 10px;
+
+        .user {
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
+            background-color: rgb(3, 183, 255); 
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            align-items: center;
+
+
+            .logout {
+                font-size: 13px;
+                color: rgb(255, 255, 255);
+            }
+
+            .user_info {
+                display: flex;
+                flex-direction: column;
+
+                .login {
+                    font-size: 12px;
+                }
+            }
+        }
 
         .user_item {
             border-bottom: 1px solid rgb(3, 183, 255); 

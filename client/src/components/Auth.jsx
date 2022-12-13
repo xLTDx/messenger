@@ -1,28 +1,43 @@
-import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../redux/userSlice';
 
 const Auth = () => {
 
-    const user = useSelector((state) => state.user)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
+    console.log('qweqweqweqwe')
 
-    console.log(user.id)
-
+    const isMounted = useRef(false)
     useEffect(() => {
-        if (user.id == "") {
 
-            navigate('/registration')
+        if (isMounted.current == true) {
+
+            const user = JSON.parse(localStorage.getItem('user'))?.id
+
+            console.log(user)
+
+            if (user) {
+
+                dispatch(setUser(user))
+                navigate('/main')
+
+            }
+
+
+            else {
+
+                navigate('/registration')
+
+            }
 
         }
-        else{
 
-            
+        isMounted.current = true
 
-            navigate('/main')
 
-        }
     }, [])
 
     return (

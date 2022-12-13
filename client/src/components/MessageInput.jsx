@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const MessageInput = (props) => {
 
-    const { getMessage } = props
+    const { getMessage, socket } = props
 
     // console.log(dialogId)
 
@@ -12,7 +12,7 @@ const MessageInput = (props) => {
 
     const user = useSelector((state) => state.user)
 
-    const socket = user.socket
+    
 
     // useEffect(() => {
     //     setDialogId(user.selectedDialog)

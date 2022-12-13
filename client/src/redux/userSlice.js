@@ -1,15 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { users } from "../DB";
-import axios from 'axios'
+import { createSlice } from "@reduxjs/toolkit";
+
 
 const initialState = {
-    id: "",
-    name: "",
-    login: "",
-    token: "",
+    id: JSON.parse(localStorage.getItem('user'))?.id || "",
+    name: JSON.parse(localStorage.getItem('user'))?.name || "",
+    login: JSON.parse(localStorage.getItem('user'))?.login || "",
+    token: JSON.parse(localStorage.getItem('user'))?.token || "",
     recepientId: "",
-    selectedDialog: "",
-    socket: {}
+    selectedDialog: ""
 }
 
 export const userSlice = createSlice({
@@ -33,10 +31,19 @@ export const userSlice = createSlice({
         },
         setSocket: (state, action) => {
             state.socket = action.payload
+        },
+        logOut: (state) => {
+            state.id = ""
+            state.name = ""
+            state.login = ""
+            state.token = ""
+            state.recepientId = ""
+            state.selectedDialog = ""
+
         }
         
     }
 })
 
-export const { setUser, setRecepient, setSelectedDialog, setSocket } = userSlice.actions
+export const { setUser, setRecepient, setSelectedDialog, setSocket, logOut } = userSlice.actions
 export default userSlice.reducer

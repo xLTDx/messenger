@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -41,6 +41,17 @@ const Register = () => {
     const [userName, setUserName] = useState()
     const [exist, setExist] = useState()
 
+    const isMount = useRef(false)
+    useEffect(() => {
+        if(isMount.current == true){
+            if(JSON.parse(localStorage.getItem('user'))?.id != ""){
+                navigate('/main')
+            }
+        }
+
+        isMount.current = true
+    })
+
     return (
         <div className='enter'>
 
@@ -56,7 +67,7 @@ const Register = () => {
 
             </form>
 
-            
+
 
         </div>
     )

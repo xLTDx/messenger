@@ -6,6 +6,9 @@ import { store } from './redux/store';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
 import Enter from './components/Enter';
+import { io } from 'socket.io-client';
+
+const socket = io()
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,7 +16,7 @@ root.render(
         <BrowserRouter>
             <Provider store={store}>
 
-                <App />
+                <App socket={socket}/>
 
             </Provider>
         </BrowserRouter>

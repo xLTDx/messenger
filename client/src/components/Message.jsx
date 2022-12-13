@@ -1,75 +1,78 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { users } from '../DB'
 import { getUserNameById } from './../utils/get'
 import io from 'socket.io-client'
 import MessageInput from './MessageInput'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 import axios from 'axios'
+import { setSelectedDialog } from '../redux/userSlice'
 
-const Message = () => {
+const Message = ({ socket }) => {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const dispatch = useDispatch()
 
     const bottom = useRef()
 
     const userData = useSelector((state) => state.user)
 
-    const socket = userData.socket
 
 
-    const [messagesList, setMessagesList] = useState([])
+    const [messagesList, setMessagesList] = useState(null)
 
     const [recepientData, setRecepientData] = useState()
 
     const getMessage = async () => {
-            console.log("start getting")
-    
+        console.log("start getting")
+
+        if (userData.selectedDialog != "" && userData.id != "") {
             await axios.post("http://localhost:7153/getMessage", { dialogId: userData.selectedDialog, userId: userData.id })
                 .then(resp => { setMessagesList(resp.data.messages); console.log("get") })
             console.log("geted")
-            
         }
 
-   
+    }
+
+    const removeDialog = async () => {
+        await axios.post("http://localhost:7153/removeDialog", { dialogId: userData.selectedDialog })
+            .then(resp => setMessagesList(null))
+            socket.emit("removeDialog", userData.selectedDialog)
+            console.log("start delete")
+    }
+
+
 
     const getRecepient = async () => {
         await axios.post("http://localhost:7153/getRecepient", { dialogId: userData.selectedDialog, userId: userData.id })
             .then(resp => setRecepientData(resp.data))
     }
 
-    
+
     const isMounted = useRef(false)
     useEffect(() => {
         if (isMounted.current == true) {
 
-            // setDialogId(searchParams.get("dialogId"))
-            // console.log(dialogId)
+            const query = searchParams.get("dialogId")
+            console.log(query)
+            if(query){
+                console.log("set")
+                dispatch(setSelectedDialog(query))
+            }
 
-            console.log("create")
+
             socket.on('chat', function (data) {
-
-                console.log("get something")
 
                 getMessage()
 
-                // console.log("chat inp")
-
-                // let promise = new Promise(function (resolve, reject) {
-                //     resolve(sendMessage(data))
-                // });
-
-                // promise.then(function (result) {
-                //     getMessage()
-                // });
-
-
             });
 
+            socket.on('removeDialog', function (data) {
 
+                setMessagesList()
 
-
-            // socket.emit("leave", null)
-
-            
+            });
 
         }
         isMounted.current = true
@@ -78,7 +81,7 @@ const Message = () => {
 
     useEffect(() => {
 
-        
+
         getRecepient()
         getMessage()
 
@@ -92,27 +95,34 @@ const Message = () => {
         bottom.current.scrollIntoView({ behavior: 'smooth' });
     }, [messagesList])
 
-    // useEffect(() => {
-    //     setDialogId(userData.selectedDialog)
-    // }, [userData.selectedDialog])
-
-
-     // const getLastMessage = async () => {
-    //     await axios.post("http://localhost:7153/getLastMessage", { dialogId })
-    //         .then(resp => {
-    //             const arr = [...messagesList]
-    //             console.log(arr)
-    //             console.log("asdasdasd")
-    //             //setMessagesList(messagesList.push(resp.data.message)) 
-
-    //         })
-    // }
-
     return (
 
         <div className='message_wrap item'>
+            <div className='recepient_info'>
+                {
 
+                    <Fragment>
+                        <div>
+                            {
+                                recepientData?.user[0].name
+                            }
+                        </div>
+                        {
+                            messagesList != "" && (
+                                <div onClick={() => removeDialog()}>
+                                    Очистить
+                                </div>
+                                )
+                        }
+
+                    </Fragment>
+
+
+                }
+
+            </div>
             <div className="message">
+
                 {
                     messagesList?.map((obj) => (
 
@@ -154,8 +164,12 @@ const Message = () => {
                 }
                 <div ref={bottom} ></div>
             </div>
-
-            <MessageInput getMessage={getMessage} socket={socket} />
+            {
+                userData.selectedDialog && (
+                    <MessageInput getMessage={getMessage} socket={socket} />
+                )
+            }
+            
 
         </div>
     )

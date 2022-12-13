@@ -15,10 +15,9 @@ import Auth from './components/Auth';
 import io from 'socket.io-client'
 import { getDefaultMiddleware } from '@reduxjs/toolkit';
 
-const App = () => {
+const App = ({socket}) => {
 
-
-
+    
     // const getUser = async (id) => {
     //     await axios.post("http://localhost:7153/getOneUser", { id })
     //         .then(resp => { dispatch(setUser(resp.data.result[0])) })
@@ -41,18 +40,21 @@ const App = () => {
 
     const user = useSelector((state) => state.user)
 
-    const isMounted = useRef(false)
-    useEffect(() => {
-        if (isMounted.current == true) {
+    // const isMounted = useRef(false)
+    // useEffect(() => {
+    //     if (isMounted.current == true) {
 
-            const socket = io();
+    //         const sk = io()
+
+    //         console.log(sk)
+
+    //         setSocket(sk)
             
-            dispatch(setSocket(socket))
 
-        }
-        isMounted.current = true
+    //     }
+    //     isMounted.current = true
 
-    }, [])
+    // }, [])
 
 
     return (
@@ -69,7 +71,7 @@ const App = () => {
                         <Route path="/" element={<Auth />} />
                         <Route path="/registration" element={<Register />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/main/*" element={<Main />} />
+                        <Route path="/main/*" element={<Main socket={socket} />} />
 
 
                     </Route>

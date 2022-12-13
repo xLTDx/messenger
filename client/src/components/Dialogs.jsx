@@ -6,6 +6,7 @@ import { setDialog } from '../redux/dialogSlice'
 import LeftNav from './LeftNav'
 import Users from './Users'
 import { useNavigate } from 'react-router-dom';
+import User from './User'
 
 const Dialogs = () => {
 
@@ -17,6 +18,8 @@ const Dialogs = () => {
     return (
         <div className='dialogs item'>
             
+            <User />
+
             <Users />
 
             {/* <LeftNav />

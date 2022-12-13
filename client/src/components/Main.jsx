@@ -1,32 +1,33 @@
-import React, { Fragment, useEffect, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 import Dialogs from './Dialogs'
-import { Routes, Route, useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom';
 import Message from './Message';
-import { useSelector } from 'react-redux';
 import Info from './Info';
+import { useNavigate } from 'react-router-dom';
 
-const Main = () => {
+const Main = ({socket}) => {
 
-    const [searchParams, setSearchParams] = useSearchParams();
-        
-    const [dialogId, setDialogId] = useState()
+    const navigate = useNavigate()
 
-    
+    const isMount = useRef(false)
     useEffect(() => {
-        setDialogId(searchParams.get("dialogId"))
+        if(isMount.current == true){
+            if(JSON.parse(localStorage.getItem('user')) == null){
+                navigate('/login')
+            }
+        }
 
-        // console.log("redraw")
+        isMount.current = true
     })
-
 
     return (
         <Fragment>
             
             <Dialogs />
-            <Message />
+            <Message socket={socket} />
             {/* <Routes>
                 <Route path="/main/dialog/*" element={<Message />} />
             </Routes> */}
+            <Info />
         </Fragment>
     )
 }
